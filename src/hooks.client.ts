@@ -1,0 +1,1 @@
+import './locales/i18n';
