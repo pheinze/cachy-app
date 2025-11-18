@@ -101,21 +101,19 @@ export const app = {
                 return { status: CONSTANTS.STATUS_INCOMPLETE };
             }
 
-            if (values.useAtrSl) {
-                if (values.entryPrice.gt(0) && values.atrValue.gt(0) && values.atrMultiplier.gt(0)) {
-                    const operator = currentTradeState.tradeType === CONSTANTS.TRADE_TYPE_LONG ? '-' : '+';
-                    values.stopLossPrice = currentTradeState.tradeType === CONSTANTS.TRADE_TYPE_LONG
-                        ? values.entryPrice.minus(values.atrValue.times(values.atrMultiplier))
-                        : values.entryPrice.plus(values.atrValue.times(values.atrMultiplier));
-
-                    newResults.showAtrFormulaDisplay = true;
-                    newResults.atrFormulaText = `SL = ${values.entryPrice.toFixed(4)} ${operator} (${values.atrValue} × ${values.atrMultiplier}) = ${values.stopLossPrice.toFixed(4)}`;
-                } else if (values.atrValue.gt(0) && values.atrMultiplier.gt(0)) {
-                    return { status: CONSTANTS.STATUS_INCOMPLETE };
-                }
-            } else {
+            if (!values.useAtrSl) {
                 newResults.showAtrFormulaDisplay = false;
                 newResults.atrFormulaText = '';
+            } else if (values.entryPrice.gt(0) && values.atrValue.gt(0) && values.atrMultiplier.gt(0)) {
+                const operator = currentTradeState.tradeType === CONSTANTS.TRADE_TYPE_LONG ? '-' : '+';
+                values.stopLossPrice = currentTradeState.tradeType === CONSTANTS.TRADE_TYPE_LONG
+                    ? values.entryPrice.minus(values.atrValue.times(values.atrMultiplier))
+                    : values.entryPrice.plus(values.atrValue.times(values.atrMultiplier));
+
+                newResults.showAtrFormulaDisplay = true;
+                newResults.atrFormulaText = `SL = ${values.entryPrice.toFixed(4)} ${operator} (${values.atrValue} × ${values.atrMultiplier}) = ${values.stopLossPrice.toFixed(4)}`;
+            } else if (values.atrValue.gt(0) && values.atrMultiplier.gt(0)) {
+                return { status: CONSTANTS.STATUS_INCOMPLETE };
             }
 
             newResults.isAtrSlInvalid = values.useAtrSl && values.stopLossPrice.lte(0);
