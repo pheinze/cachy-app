@@ -177,12 +177,18 @@
     "title": "Einstellungen",
     "theme": "Theme",
     "language": "Sprache",
-    "backup": "Sicherung"
+    "backup": "Sicherung",
+    "apiProvider": "API Anbieter"
   },
   "apiErrors": {
     "symbolNotFound": "Symbol auf Bitunix nicht gefunden oder API-Fehler.",
     "invalidResponse": "Ungültige Antwort von der Bitunix-API.",
     "klineError": "Kerzendaten von Bitunix konnten nicht geladen werden.",
     "generic": "Ein unbekannter API-Fehler ist aufgetreten."
+  },
+  "ticker": {
+    "priceChange24h": "Preisänderung (24h)",
+    "highLow24h": "Hoch / Tief (24h)",
+    "volume24h": "Volumen (24h)"
   }
 }

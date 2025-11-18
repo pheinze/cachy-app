@@ -6,6 +6,7 @@ import { modalManager } from './modalManager';
 import { uiManager } from './uiManager';
 import { calculator } from '../lib/calculator';
 import { tradeStore, updateTradeStore, resetAllInputs, toggleAtrInputs } from '../stores/tradeStore';
+import { tickerStore } from '../stores/tickerStore';
 import { resultsStore, initialResultsState } from '../stores/resultsStore';
 import { presetStore, updatePresetStore } from '../stores/presetStore';
 import { journalStore } from '../stores/journalStore';
@@ -586,9 +587,10 @@ export const app = {
             uiStore.showError("Bitte geben Sie ein Symbol ein.");
             return;
         }
+        app.fetchTickerInfo(symbol);
         uiStore.update(state => ({ ...state, isPriceFetching: true }));
         try {
-            const price = await apiService.fetchBitunixPrice(symbol);
+            const price = await apiService.fetchPrice(symbol);
             updateTradeStore(state => ({ ...state, entryPrice: price.toDP(4).toNumber() }));
             uiStore.showFeedback('copy', 700);
             app.calculateAndDisplay();
@@ -628,7 +630,7 @@ export const app = {
         }
         uiStore.update(state => ({ ...state, isPriceFetching: true }));
         try {
-            const klines = await apiService.fetchBitunixKlines(symbol, currentTradeState.atrTimeframe);
+            const klines = await apiService.fetchKlines(symbol, currentTradeState.atrTimeframe);
             const atr = calculator.calculateATR(klines);
             if (atr.lte(0)) {
                 throw new Error("ATR konnte nicht berechnet werden. Prüfen Sie das Symbol oder den Zeitrahmen.");
@@ -648,6 +650,26 @@ export const app = {
         updateTradeStore(s => ({ ...s, symbol: symbol }));
         uiStore.update(s => ({ ...s, showSymbolSuggestions: false, symbolSuggestions: [] }));
         app.handleFetchPrice();
+    },
+
+    fetchTickerInfo: async (symbol: string) => {
+        if (!symbol) {
+            tickerStore.clear();
+            return;
+        }
+        tickerStore.setLoading();
+        try {
+            const stats = await apiService.fetchTickerStats(symbol);
+            if (stats) {
+                tickerStore.setStats(stats);
+            } else {
+                // This case should ideally not be reached if the API service throws errors
+                tickerStore.setError("No data received from API.");
+            }
+        } catch (error) {
+            const message = error instanceof Error ? error.message : "An unknown error occurred while fetching ticker info.";
+            tickerStore.setError(message);
+        }
     },
 
     updateSymbolSuggestions: (query: string) => {

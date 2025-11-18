@@ -30,6 +30,7 @@ import { trackCustomEvent } from '../services/trackingService';
     import ModalFrame from '../components/shared/ModalFrame.svelte';
     import SettingsButton from '../components/settings/SettingsButton.svelte';
     import SettingsModal from '../components/settings/SettingsModal.svelte';
+    import TickerInfo from '../components/info/TickerInfo.svelte';
 
     let fileInput: HTMLInputElement;
     let changelogContent = '';
@@ -58,6 +59,13 @@ import { trackCustomEvent } from '../services/trackingService';
     $: if ($locale) {
         guideContent = '';
         changelogContent = '';
+    }
+
+    // Reactive statement to fetch ticker info when the symbol changes
+    $: {
+        if ($tradeStore.symbol) {
+            app.fetchTickerInfo($tradeStore.symbol);
+        }
     }
 
     // Reactive statement to trigger app.calculateAndDisplay() when relevant inputs change
@@ -249,6 +257,8 @@ import { trackCustomEvent } from '../services/trackingService';
             <button id="view-journal-btn-desktop" class="hidden md:inline-block text-sm bg-[var(--btn-accent-bg)] hover:bg-[var(--btn-accent-hover-bg)] text-[var(--btn-accent-text)] font-bold py-2 px-4 rounded-lg md:order-2" title="{$_('app.journalButtonTitle')}" on:click={() => uiStore.toggleJournalModal(true)} use:trackClick={{ category: 'Navigation', action: 'Click', name: 'ViewJournalDesktop' }}>{$_('app.journalButton')}</button>
         </div>
     </div>
+
+    <TickerInfo />
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
         <div>

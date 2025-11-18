@@ -177,12 +177,18 @@
     "title": "Settings",
     "theme": "Theme",
     "language": "Language",
-    "backup": "Backup"
+    "backup": "Backup",
+    "apiProvider": "API Provider"
   },
   "apiErrors": {
     "symbolNotFound": "Symbol not found on Bitunix or API error.",
     "invalidResponse": "Invalid response from the Bitunix API.",
     "klineError": "Could not load candlestick data from Bitunix.",
     "generic": "An unknown API error occurred."
+  },
+  "ticker": {
+    "priceChange24h": "Price Change (24h)",
+    "highLow24h": "High / Low (24h)",
+    "volume24h": "Volume (24h)"
   }
 }
