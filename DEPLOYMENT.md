@@ -13,8 +13,8 @@ Diese Anleitung beschreibt, wie Sie die Anwendung auf Ihrem eigenen Webserver be
 1.  **Repository klonen**
     Öffnen Sie ein Terminal auf Ihrem Server und klonen Sie das Repository:
     ```bash
-    git clone https://github.com/pheinze/cachy-app.git
-    cd cachy-app
+    git clone <repository_url>
+    cd <repository_verzeichnis>
     ```
 
 2.  **Abhängigkeiten installieren**
